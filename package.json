@@ -1,0 +1,21 @@
+{
+  "name": "codelingo",
+  "version": "0.1.0",
+  "description": "Claude Code slash commands for understanding unfamiliar code",
+  "keywords": ["claude", "claude-code", "ai", "code-understanding", "developer-tools"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/songgyubin/CodeLingo"
+  },
+  "bin": {
+    "codelingo": "./bin/codelingo.js"
+  },
+  "files": [
+    "bin/",
+    "commands/"
+  ],
+  "engines": {
+    "node": ">=16"
+  }
+}
