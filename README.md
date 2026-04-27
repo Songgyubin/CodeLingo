@@ -21,19 +21,31 @@ CodeLingo packages those three workflows as Claude Code slash commands instead o
 - `/change-impact` to estimate blast radius before editing code
 - `/handoff` to generate a structured handoff document for the next reader
 
-## Quick Start
+## Install With npm
 
 ```bash
 npm install -g codelingo
 codelingo install
 ```
 
-Then open Claude Code and run one of these:
+`codelingo install` copies the slash-command Markdown files into `~/.claude/commands/`.
+
+## Use In Claude Code
+
+Open Claude Code and run one of these:
 
 ```text
 /explain-file src/utils/scheduler.py
 /change-impact src/utils/scheduler.py "Add a retry limit parameter"
 /handoff src/auth/middleware.ts
+```
+
+## Manage Your Install
+
+```text
+codelingo list
+codelingo help
+codelingo uninstall
 ```
 
 ## What Each Command Produces
@@ -45,8 +57,6 @@ Then open Claude Code and run one of these:
 | `/handoff <path>` | You need a structured handoff for another reader | `.codelingo/HANDOFF-<filename>.md` |
 
 ## Install Notes
-
-`codelingo install` copies three Markdown slash-command files into `~/.claude/commands/`.
 
 If you do not want the npm package, you can also install manually:
 
