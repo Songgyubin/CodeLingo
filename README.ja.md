@@ -4,50 +4,103 @@
 
 見慣れないコードを素早く安全に理解するための Claude Code スラッシュコマンド集です。
 
-コマンドは3つだけ。どんなプロジェクトにもすぐに追加でき、Claude Code のネイティブな `/` コマンドシステムとそのまま連携します。
+毎回その場でプロンプトを書く代わりに、CodeLingo は3つの典型的な状況に合わせたコマンドを用意します。ファイルを理解したいとき、変更の影響を読む前に把握したいとき、そして次の人のためにハンドオフ文書を作りたいときです。
 
-## コマンド
+## 向いている人
 
-### `/explain-file <パス>`
+- 初めて見るリポジトリを素早く読みたい開発者
+- AI 生成コードやバイブコーディングしたコードを後から理解し直したい人
+- 大げさな社内ドキュメント基盤なしで、最低限の構造化ドキュメントを残したいチーム
 
-スキルレベルに合わせてソースファイルを解析し、結果を `.codelingo/` に保存します。
+## クイックスタート
 
-- 言語の習熟度（初級 / 普通 / 上級）を確認し、説明の深さを調整します
-- 解析結果を `.codelingo/<ファイル名>.md` に保存します
-- ソースファイルに直接コメントを追加するオプションもあります:
-  - **A** - ファイル先頭に TL;DR サマリーブロック
-  - **B** - 各関数・クラスの前に簡単な説明コメント
-  - **C** - 難解なロジック行ごとにインラインコメント
-
-### `/change-impact <パス> ["変更内容"]`
-
-変更前に、その影響範囲を把握します。
-
-- 直接影響を受ける関数・行を行番号付きで表示します
-- 呼び出し元を `probably / possibly / unknown` の信頼度で推論します
-- イベントエミッター、DI、動的インポートなど、静的解析の限界となる動的パターンを明示します
-- Before/After チェックリストを提供します
-- `.codelingo/change-impact-<ファイル名>.md` に保存します
-
-### `/handoff <パス>`
-
-任意のソースファイルに対して、構造化されたハンドオフドキュメントを生成します。
-
-- 読み手（同じチームの開発者 / 外部開発者 / 非開発者）を確認し、説明の深さを調整します
-- モジュールの目的、アーキテクチャ用語集、主要な判断とその理由、依存関係マップ、よくある変更方法、既知の落とし穴を整理します
-- ソースファイル先頭に TL;DR コメントを挿入するオプションもあります
-- `.codelingo/HANDOFF-<ファイル名>.md` に保存します
-
-## インストール
-
-**npm でインストール（推奨）:**
+1. パッケージをインストールします。
+2. Claude Code 用のスラッシュコマンドをコピーします。
+3. 実際のファイル1つにすぐ実行します。
 
 ```bash
 npm install -g codelingo
 codelingo install
 ```
 
-**手動インストール（3ファイルをコピー）:**
+そのあと Claude Code で:
+
+```text
+/explain-file src/utils/scheduler.py
+```
+
+最初の数分でしっくり来れば、残りのコマンドの使いどころもすぐ分かります。
+
+## コマンド一覧
+
+| コマンド | 使う場面 | 出力ファイル |
+|---------|----------|-------------|
+| `/explain-file <パス>` | 修正前にまずファイルを理解したいとき | `.codelingo/<ファイル名>.md` |
+| `/change-impact <パス> ["変更内容"]` | 修正前に影響範囲を見積もりたいとき | `.codelingo/change-impact-<ファイル名>.md` |
+| `/handoff <パス>` | 次の人向けの引き継ぎ文書を作りたいとき | `.codelingo/HANDOFF-<ファイル名>.md` |
+
+### `/explain-file <パス>`
+
+スキルレベルに合わせてソースファイルを説明し、結果を保存します。
+
+できること:
+- 言語への習熟度として初級、普通、上級を先に確認します
+- 誰にでも同じ説明を返さず、深さを調整します
+- 行番号、制御フロー、依存関係、落とし穴、次に読むべきものまで整理します
+- 必要ならソースファイルへコメントを直接追加できます
+
+例:
+
+```text
+/explain-file src/services/billing/retry_policy.ts
+```
+
+### `/change-impact <パス> ["変更内容"]`
+
+ファイルを修正する前に、何が壊れそうか、どこを一緒に確認すべきかを整理します。
+
+できること:
+- まずこのファイルの役割を短く説明して、影響分析の前提をそろえます
+- 直接変わる関数、クラス、定数、行を挙げます
+- 想定される呼び出し元を `probably`、`possibly`、`unknown` で分けて示します
+- 変更前後のチェックリストを作り、安全に修正しやすくします
+
+例:
+
+```text
+/change-impact src/services/billing/retry_policy.ts "backoff の最大値を追加したい"
+```
+
+### `/handoff <パス>`
+
+次の読み手が実際に使えるハンドオフ文書を生成します。
+
+できること:
+- 読み手が誰かを確認します: 同じチームの開発者、外部開発者、非開発者
+- その相手に合わせて説明の深さや用語を調整します
+- モジュールの目的、主要な判断、依存関係マップ、よくある変更、既知の落とし穴を整理します
+- 必要ならソースファイル先頭に TL;DR ブロックも追加できます
+
+例:
+
+```text
+/handoff src/services/billing/retry_policy.ts
+```
+
+## インストール
+
+### 1. npm でインストール
+
+```bash
+npm install -g codelingo
+codelingo install
+```
+
+このコマンドは 3 つの Markdown コマンドファイルを `~/.claude/commands/` にコピーします。
+
+### 2. 手動インストール
+
+npm パッケージを使いたくない場合は、ファイルだけ直接コピーしても構いません。
 
 ```bash
 mkdir -p ~/.claude/commands
@@ -56,32 +109,88 @@ curl -o ~/.claude/commands/change-impact.md  https://raw.githubusercontent.com/S
 curl -o ~/.claude/commands/handoff.md        https://raw.githubusercontent.com/Songgyubin/CodeLingo/main/commands/handoff.md
 ```
 
-以上です。インストール直後から、すべての Claude Code セッションでコマンドを使えます。
+インストール後は、どの Claude Code セッションでもすぐ使えます。
 
-## 使い方
+## 実際の使われ方
+
+### 初回実行
+
+初回利用時の設定は `.codelingo/config.json` に保存されます。
+
+- `language`: `en`, `ko`, `ja`, `zh`
+- `skillLevel`: `/explain-file` 用の `beginner`, `familiar`, `expert`
+
+一度保存されれば、次回以降は同じ質問を繰り返しません。
+
+説明の深さを選び直したい場合は、`.codelingo/config.json` から `skillLevel` フィールドを削除してください。
+
+### 生成されるファイル
+
+すべての出力はプロジェクト内の `.codelingo/` ディレクトリに保存されます。
+
+- `/explain-file src/utils/job_scheduler.py`
+  → `.codelingo/job_scheduler.md`
+- `/change-impact src/utils/job_scheduler.py "..."`
+  → `.codelingo/change-impact-job_scheduler.md`
+- `/handoff src/utils/job_scheduler.py`
+  → `.codelingo/HANDOFF-job_scheduler.md`
+
+チャットの中に埋もれず、コードの近くにファイルとして残るのがポイントです。
+
+### コメント挿入
+
+2つのコマンドは、必要に応じて元ファイルも変更できます。
+
+- `/explain-file`: TL;DR ヘッダー、関数/クラス単位コメント、行単位コメント
+- `/handoff`: ハンドオフ文書を指す TL;DR ヘッダー
+
+重複挿入を避けるルールがあるため、既存の CodeLingo ブロックは追加ではなく置き換えになります。
+
+## 使用例
+
+### 修正前にファイル構造を理解する
 
 ```text
-/explain-file src/utils/scheduler.py
-/change-impact src/utils/scheduler.py "リトライ回数パラメータを追加したい"
+/explain-file src/auth/middleware.ts
+```
+
+ファイルは開いたが、まだ安全に触れる自信がないときに使います。
+
+### リファクタ前に影響範囲を確認する
+
+```text
+/change-impact src/auth/middleware.ts "トークン解析と権限チェックを分離したい"
+```
+
+小さく見えるが実は広がりそうな変更に向いています。
+
+### 次の人向けに説明を残す
+
+```text
 /handoff src/auth/middleware.ts
 ```
 
-**設定の保存:**
-
-初回実行時に言語設定とスキルレベルを `.codelingo/config.json` に保存します。以降の実行では、それらの質問をスキップします。
-
-スキルレベルをリセットするには、`.codelingo/config.json` から `skillLevel` フィールドを削除してください。
+チームメンバー、外部開発者、PM に背景つきで説明したいときに有効です。
 
 ## CLI リファレンス
 
 ```text
-codelingo install      コマンドを ~/.claude/commands/ にコピー
-codelingo uninstall    コマンドを ~/.claude/commands/ から削除
-codelingo list         インストール済みコマンドの一覧表示
+codelingo install      スラッシュコマンドを ~/.claude/commands/ にコピー
+codelingo uninstall    スラッシュコマンドを ~/.claude/commands/ から削除
+codelingo list         インストール状態を表示
+codelingo help         ヘルプを表示
 ```
 
-## 動作要件
+## 要件
 
-- [Claude Code](https://claude.ai/code)（すべてのプラン）
-- Claude Code に設定された Anthropic API キー
-- Node.js 16 以上（npm インストール方式のみ）
+- [Claude Code](https://claude.ai/code)
+- Claude Code に設定済みの Anthropic API キー
+- npm インストール方式を使う場合は Node.js 16 以上
+
+## 想定していることと限界
+
+- AST ベースの静的解析ではなく、プロンプト駆動のワークフローです
+- `/change-impact` の呼び出し元推定は、あえて信頼度を明示します
+- 生成コードやノイズの多いファイルは、無理に説明せず拒否するのが正常動作です
+
+Claude Code の中で、コード理解の流れをもう少し構造化したいなら、このプロジェクトはそこに焦点を当てています。

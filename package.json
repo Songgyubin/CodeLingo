@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "description": "Claude Code slash commands for understanding unfamiliar code",
   "keywords": ["claude", "claude-code", "ai", "code-understanding", "developer-tools"],
+  "homepage": "https://github.com/songgyubin/CodeLingo#readme",
+  "bugs": {
+    "url": "https://github.com/songgyubin/CodeLingo/issues"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/songgyubin/CodeLingo"
+    "url": "git+https://github.com/songgyubin/CodeLingo.git"
   },
   "bin": {
     "codelingo": "./bin/codelingo.js"
