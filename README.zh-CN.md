@@ -19,7 +19,7 @@
 3. 直接对一个真实文件运行一次。
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 
@@ -92,7 +92,7 @@ codelingo install
 ### 1. 通过 npm 安装
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 

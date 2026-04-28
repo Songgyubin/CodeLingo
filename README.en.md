@@ -19,7 +19,7 @@ Instead of throwing a raw prompt at an AI every time you open a new file, CodeLi
 3. Run one command on a real file.
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 
@@ -92,7 +92,7 @@ Good example:
 ### Option 1: npm install
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 

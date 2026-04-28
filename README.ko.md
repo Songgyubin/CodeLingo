@@ -19,7 +19,7 @@
 3. 실제 파일 하나에 바로 실행해 봅니다.
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 
@@ -92,7 +92,7 @@ codelingo install
 ### 1. npm 설치
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 

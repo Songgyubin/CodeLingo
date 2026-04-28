@@ -19,7 +19,7 @@
 3. 実際のファイル1つにすぐ実行します。
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 
@@ -92,7 +92,7 @@ codelingo install
 ### 1. npm でインストール
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 

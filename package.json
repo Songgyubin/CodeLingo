@@ -1,5 +1,5 @@
 {
-  "name": "codelingo",
+  "name": "@gyub.s/codelingo",
   "version": "0.1.0",
   "description": "Claude Code slash commands for understanding unfamiliar code",
   "keywords": ["claude", "claude-code", "ai", "code-understanding", "developer-tools"],

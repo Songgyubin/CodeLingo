@@ -24,7 +24,7 @@ CodeLingo packages those three workflows as Claude Code slash commands instead o
 ## Install With npm
 
 ```bash
-npm install -g codelingo
+npm install -g @gyub.s/codelingo
 codelingo install
 ```
 
