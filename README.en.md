@@ -2,9 +2,9 @@
 
 [한국어](README.ko.md) · [English](README.en.md) · [日本語](README.ja.md) · [中文](README.zh-CN.md)
 
-Claude Code slash commands for understanding unfamiliar code, quickly and safely.
+Agent-based code understanding workflows for unfamiliar code.
 
-Instead of throwing a raw prompt at an AI every time you open a new file, CodeLingo gives you three focused commands for three common situations: understand the file, predict the impact of a change, and hand the file off to someone else.
+Instead of throwing a raw prompt at an AI every time you open a new file, CodeLingo gives you three focused workflows for three common situations: understand the file, predict the impact of a change, and hand the file off to someone else. You can use it as Claude Code slash commands or as a lightweight agent harness that prepares provider-ready prompts.
 
 ## Who This Is For
 
@@ -15,11 +15,16 @@ Instead of throwing a raw prompt at an AI every time you open a new file, CodeLi
 ## Quick Start
 
 1. Install the package.
-2. Copy the slash commands into Claude Code.
-3. Run one command on a real file.
+2. Choose Claude Code slash commands or the agent harness.
+3. Run one workflow on a real file.
 
 ```bash
 npm install -g @gyub.s/codelingo
+```
+
+### Option 1: Claude Code slash commands
+
+```bash
 codelingo install
 ```
 
@@ -27,9 +32,21 @@ Then in Claude Code:
 
 ```text
 /explain-file src/utils/scheduler.py
+/change-impact src/utils/scheduler.py "Add retry limit"
+/handoff src/auth/middleware.ts
 ```
 
-If it clicks in the first few minutes, the rest of the workflow will make sense immediately.
+### Option 2: Agent harness
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language en --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "Add retry limit"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+`codelingo run` does not call a model directly. It applies the source-file guard, reads the file, composes the task's agent pipeline, and writes a provider-ready prompt under `.codelingo/runs/`.
 
 ## What Each Command Does
 

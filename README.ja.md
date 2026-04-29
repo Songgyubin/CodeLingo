@@ -2,9 +2,9 @@
 
 [한국어](README.ko.md) · [English](README.en.md) · [日本語](README.ja.md) · [中文](README.zh-CN.md)
 
-見慣れないコードを素早く安全に理解するための Claude Code スラッシュコマンド集です。
+見慣れないコードを素早く安全に理解するための agent ベースのコード理解ワークフローです。
 
-毎回その場でプロンプトを書く代わりに、CodeLingo は3つの典型的な状況に合わせたコマンドを用意します。ファイルを理解したいとき、変更の影響を読む前に把握したいとき、そして次の人のためにハンドオフ文書を作りたいときです。
+毎回その場でプロンプトを書く代わりに、CodeLingo は3つの典型的な状況に合わせたワークフローを用意します。ファイルを理解したいとき、変更の影響を読む前に把握したいとき、そして次の人のためにハンドオフ文書を作りたいときです。Claude Code スラッシュコマンドとしても、provider に渡す agent harness プロンプト生成としても使えます。
 
 ## 向いている人
 
@@ -15,11 +15,16 @@
 ## クイックスタート
 
 1. パッケージをインストールします。
-2. Claude Code 用のスラッシュコマンドをコピーします。
+2. Claude Code スラッシュコマンドか agent harness を選びます。
 3. 実際のファイル1つにすぐ実行します。
 
 ```bash
 npm install -g @gyub.s/codelingo
+```
+
+### 方法 1: Claude Code スラッシュコマンド
+
+```bash
 codelingo install
 ```
 
@@ -27,9 +32,21 @@ codelingo install
 
 ```text
 /explain-file src/utils/scheduler.py
+/change-impact src/utils/scheduler.py "最大リトライ回数を追加"
+/handoff src/auth/middleware.ts
 ```
 
-最初の数分でしっくり来れば、残りのコマンドの使いどころもすぐ分かります。
+### 方法 2: Agent Harness
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ja --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "最大リトライ回数を追加"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+`codelingo run` はモデルを直接呼びません。ソースファイルのガードを適用し、対象ファイルを読み取り、task に対応する agent pipeline を組み合わせて `.codelingo/runs/` に provider 用プロンプトを保存します。
 
 ## コマンド一覧
 

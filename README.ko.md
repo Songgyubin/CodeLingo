@@ -2,9 +2,9 @@
 
 [한국어](README.ko.md) · [English](README.en.md) · [日本語](README.ja.md) · [中文](README.zh-CN.md)
 
-낯선 코드를 빠르고 안전하게 이해하기 위한 Claude Code 슬래시 커맨드 모음입니다.
+낯선 코드를 빠르고 안전하게 이해하기 위한 agent 기반 코드 이해 워크플로입니다.
 
-매번 프롬프트를 새로 짜서 AI에게 물어보는 대신, CodeLingo는 세 가지 상황에 맞는 커맨드를 제공합니다. 파일을 이해할 때, 변경 영향도를 보기 전에, 그리고 다른 사람에게 인수인계 문서를 만들 때입니다.
+매번 프롬프트를 새로 짜서 AI에게 물어보는 대신, CodeLingo는 세 가지 상황에 맞는 작업을 제공합니다. 파일을 이해할 때, 변경 영향도를 보기 전에, 그리고 다른 사람에게 인수인계 문서를 만들 때입니다. Claude Code 슬래시 커맨드로 쓸 수도 있고, provider에 넘길 agent harness 프롬프트를 생성할 수도 있습니다.
 
 ## 이런 사람에게 맞습니다
 
@@ -15,21 +15,42 @@
 ## 빠른 시작
 
 1. 패키지를 설치합니다.
-2. Claude Code용 슬래시 커맨드를 복사합니다.
+2. 사용할 방식을 고릅니다: Claude Code 슬래시 커맨드 또는 agent harness.
 3. 실제 파일 하나에 바로 실행해 봅니다.
 
 ```bash
 npm install -g @gyub.s/codelingo
+```
+
+### 방법 1: Claude Code 슬래시 커맨드
+
+```bash
 codelingo install
 ```
 
-그다음 Claude Code에서:
+`codelingo install`은 세 개의 Markdown 커맨드 파일을 `~/.claude/commands/`로 복사합니다. 그다음 Claude Code에서:
 
 ```text
 /explain-file src/utils/scheduler.py
+/change-impact src/utils/scheduler.py "최대 재시도 횟수 추가"
+/handoff src/auth/middleware.ts
 ```
 
-처음 몇 분 안에 감이 오면, 나머지 커맨드도 바로 이해됩니다.
+결과물은 프로젝트의 `.codelingo/` 디렉터리에 저장됩니다.
+
+### 방법 2: Agent Harness
+
+Claude Code 슬래시 커맨드 밖에서, 역할별 agent 프롬프트를 조합한 실행 프롬프트가 필요할 때 사용합니다.
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ko --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "최대 재시도 횟수 추가"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+`codelingo run`은 모델을 직접 호출하지 않습니다. 소스 파일 가드를 적용하고, 대상 파일을 읽고, task에 맞는 agent pipeline을 조합한 뒤 `.codelingo/runs/` 아래에 provider용 프롬프트를 저장합니다.
 
 ## 커맨드 구성
 
@@ -186,7 +207,7 @@ codelingo help         도움말 출력
 
 ## 하네스 모드
 
-CodeLingo는 이제 슬래시 커맨드와 같은 작업 모델을 쓰는 agent 기반 하네스 러너를 포함합니다.
+CodeLingo는 슬래시 커맨드와 같은 작업 모델을 쓰는 agent 기반 하네스 러너를 포함합니다.
 
 ```bash
 codelingo agents
@@ -204,7 +225,7 @@ change-impact  source-cartographer -> impact-analyst -> risk-reviewer -> output-
 handoff        source-cartographer -> handoff-writer -> risk-reviewer -> output-editor
 ```
 
-`codelingo run`은 소스 파일 가드를 먼저 적용하고, 대상 파일을 읽은 뒤, task에 맞는 agent 프롬프트를 조합해 provider에 넘길 수 있는 프롬프트를 `.codelingo/runs/` 아래에 저장합니다. 프롬프트에는 `.codelingo/scheduler.md`, `.codelingo/change-impact-scheduler.md` 같은 최종 산출물 경로도 함께 들어갑니다.
+`codelingo run`은 소스 파일 가드를 먼저 적용하고, 대상 파일을 읽은 뒤, task에 맞는 agent 프롬프트를 조합해 provider에 넘길 수 있는 프롬프트를 `.codelingo/runs/` 아래에 저장합니다. 프롬프트에는 소스 파일 내용, agent pipeline, `.codelingo/scheduler.md`, `.codelingo/change-impact-scheduler.md` 같은 최종 산출물 경로가 함께 들어갑니다.
 
 ## 필요 조건
 

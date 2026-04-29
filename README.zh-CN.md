@@ -2,9 +2,9 @@
 
 [한국어](README.ko.md) · [English](README.en.md) · [日本語](README.ja.md) · [中文](README.zh-CN.md)
 
-用于快速、安全地理解陌生代码的 Claude Code 斜杠命令集。
+用于快速、安全地理解陌生代码的 agent-based 代码理解工作流。
 
-与其每次都临时写一段提示词去问 AI，CodeLingo 直接把三类高频场景做成了三个命令：先理解文件、修改前评估影响、以及为下一个读者生成交接文档。
+与其每次都临时写一段提示词去问 AI，CodeLingo 直接把三类高频场景做成了三个工作流：先理解文件、修改前评估影响、以及为下一个读者生成交接文档。你可以把它作为 Claude Code 斜杠命令使用，也可以用 agent harness 生成可交给 provider 的提示词。
 
 ## 适合谁
 
@@ -15,11 +15,16 @@
 ## 快速开始
 
 1. 安装包。
-2. 把斜杠命令复制到 Claude Code。
+2. 选择 Claude Code 斜杠命令或 agent harness。
 3. 直接对一个真实文件运行一次。
 
 ```bash
 npm install -g @gyub.s/codelingo
+```
+
+### 方式 1：Claude Code 斜杠命令
+
+```bash
 codelingo install
 ```
 
@@ -27,9 +32,21 @@ codelingo install
 
 ```text
 /explain-file src/utils/scheduler.py
+/change-impact src/utils/scheduler.py "添加最大重试次数"
+/handoff src/auth/middleware.ts
 ```
 
-如果前几分钟就感觉顺手，后面的工作流基本也会成立。
+### 方式 2：Agent Harness
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language zh --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "添加最大重试次数"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+`codelingo run` 不会直接调用模型。它会应用源文件 guard，读取目标文件，组合对应 task 的 agent pipeline，然后把 provider 用提示词保存到 `.codelingo/runs/`。
 
 ## 命令说明
 

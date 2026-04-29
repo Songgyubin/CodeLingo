@@ -1,8 +1,8 @@
 # CodeLingo
 
-Claude Code slash commands for understanding unfamiliar code, quickly and safely.
+Agent-based code understanding workflows for unfamiliar code.
 
-CodeLingo helps you inspect a file, estimate the impact of a change, and generate a handoff document without leaving your editor or Claude Code session.
+CodeLingo helps you inspect a file, estimate the impact of a change, and generate a handoff document. You can use it as Claude Code slash commands or as a lightweight agent harness that prepares provider-ready prompts.
 
 **Choose your language:**
 [한국어](README.ko.md) · [English](README.en.md) · [日本語](README.ja.md) · [中文](README.zh-CN.md)
@@ -13,7 +13,7 @@ CodeLingo helps you inspect a file, estimate the impact of a change, and generat
 - You want to understand blast radius before changing it
 - You need a handoff document without writing one from scratch
 
-CodeLingo packages those three workflows as Claude Code slash commands instead of making you reinvent prompts every time.
+CodeLingo packages those three workflows as reusable tasks instead of making you reinvent prompts every time.
 
 ## What You Get
 
@@ -21,16 +21,21 @@ CodeLingo packages those three workflows as Claude Code slash commands instead o
 - `/change-impact` to estimate blast radius before editing code
 - `/handoff` to generate a structured handoff document for the next reader
 
-## Install With npm
+## Install
 
 ```bash
 npm install -g @gyub.s/codelingo
+```
+
+## Usage Option 1: Claude Code Slash Commands
+
+Install the slash commands:
+
+```bash
 codelingo install
 ```
 
 `codelingo install` copies the slash-command Markdown files into `~/.claude/commands/`.
-
-## Use In Claude Code
 
 Open Claude Code and run one of these:
 
@@ -40,17 +45,17 @@ Open Claude Code and run one of these:
 /handoff src/auth/middleware.ts
 ```
 
-## Manage Your Install
+The commands write results into `.codelingo/`:
 
 ```text
-codelingo list
-codelingo help
-codelingo uninstall
+.codelingo/scheduler.md
+.codelingo/change-impact-scheduler.md
+.codelingo/HANDOFF-middleware.md
 ```
 
-## Harness Mode
+## Usage Option 2: Agent Harness
 
-CodeLingo also includes a lightweight agent-based harness runner. It prepares a reusable task prompt from the same task model used by the slash commands:
+Use the harness when you want CodeLingo to compose role-specific agent prompts outside Claude Code slash commands:
 
 ```bash
 codelingo agents
@@ -60,15 +65,34 @@ codelingo run change-impact src/utils/scheduler.py --change "Add a retry limit"
 codelingo run handoff src/auth/middleware.ts --audience "external developer"
 ```
 
-Agents live in `agents/*.md`, so each role prompt is editable as a plain Markdown file. Current task pipelines:
+`codelingo run` does not call a model directly. It applies the file guard, reads the target file, composes the task's agent pipeline, and writes a provider-ready prompt under `.codelingo/runs/`.
+
+Each generated run prompt includes:
+
+- the source file content
+- the selected task
+- the agent pipeline
+- the expected final output path under `.codelingo/`
+
+## Manage Your Install
+
+```text
+codelingo list
+codelingo agents
+codelingo tasks
+codelingo help
+codelingo uninstall
+```
+
+## Agent Pipelines
+
+Agents live in `agents/*.md`, so each role prompt is editable as a plain Markdown file. Current pipelines:
 
 ```text
 explain-file   source-cartographer -> explainer -> risk-reviewer -> output-editor
 change-impact  source-cartographer -> impact-analyst -> risk-reviewer -> output-editor
 handoff        source-cartographer -> handoff-writer -> risk-reviewer -> output-editor
 ```
-
-`codelingo run` applies the source-file guard, reads the target file, composes the agent prompts, and writes a provider-ready prompt under `.codelingo/runs/`. The prompt includes the expected final output path, such as `.codelingo/scheduler.md` or `.codelingo/change-impact-scheduler.md`.
 
 ## What Each Command Produces
 
