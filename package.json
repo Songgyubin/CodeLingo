@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Claude Code slash commands for understanding unfamiliar code",
   "keywords": ["claude", "claude-code", "ai", "code-understanding", "developer-tools"],
+  "main": "lib/index.js",
   "homepage": "https://github.com/songgyubin/CodeLingo#readme",
   "bugs": {
     "url": "https://github.com/songgyubin/CodeLingo/issues"
@@ -15,9 +16,14 @@
   "bin": {
     "codelingo": "./bin/codelingo.js"
   },
+  "scripts": {
+    "test": "node test/harness.test.js"
+  },
   "files": [
+    "agents/",
     "bin/",
-    "commands/"
+    "commands/",
+    "lib/"
   ],
   "engines": {
     "node": ">=16"
