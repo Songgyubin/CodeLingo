@@ -178,8 +178,25 @@ curl -o ~/.claude/commands/handoff.md        https://raw.githubusercontent.com/S
 codelingo install      スラッシュコマンドを ~/.claude/commands/ にコピー
 codelingo uninstall    スラッシュコマンドを ~/.claude/commands/ から削除
 codelingo list         インストール状態を表示
+codelingo agents       利用できる役割プロンプトを表示
+codelingo tasks        利用できるハーネスタスクを表示
+codelingo run          ソースファイル用のハーネス実行プロンプトを生成
 codelingo help         ヘルプを表示
 ```
+
+## ハーネスモード
+
+CodeLingo には、スラッシュコマンドと同じタスクモデルを使う軽量 agent ベースのハーネスランナーも含まれます。
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ja --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "最大リトライ回数を追加"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+役割プロンプトは `agents/*.md` にあります。`codelingo run` はソースファイルのガードを適用し、対象ファイルを読み取り、task に対応する agent プロンプトを組み合わせて provider に渡せるプロンプトを `.codelingo/runs/` に保存します。プロンプトには最終出力先も含まれます。
 
 ## 要件
 

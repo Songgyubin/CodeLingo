@@ -178,8 +178,25 @@ Use this when a teammate, contractor, or PM needs a compact explanation with con
 codelingo install      Copy slash commands to ~/.claude/commands/
 codelingo uninstall    Remove slash commands from ~/.claude/commands/
 codelingo list         Show which commands are installed
+codelingo agents       Show available role prompts
+codelingo tasks        Show available harness tasks
+codelingo run          Prepare a harness run prompt for a source file
 codelingo help         Show help
 ```
+
+## Harness Mode
+
+CodeLingo also includes a lightweight agent-based harness runner that uses the same task model as the slash commands.
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ko --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "Add retry limit"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+Agents live in `agents/*.md`. `codelingo run` applies the source-file guard, reads the target file, composes the task's agent prompts, and writes a provider-ready prompt under `.codelingo/runs/`. The prompt includes the expected final output path.
 
 ## Requirements
 

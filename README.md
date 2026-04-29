@@ -48,6 +48,28 @@ codelingo help
 codelingo uninstall
 ```
 
+## Harness Mode
+
+CodeLingo also includes a lightweight agent-based harness runner. It prepares a reusable task prompt from the same task model used by the slash commands:
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ko --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "Add a retry limit"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+Agents live in `agents/*.md`, so each role prompt is editable as a plain Markdown file. Current task pipelines:
+
+```text
+explain-file   source-cartographer -> explainer -> risk-reviewer -> output-editor
+change-impact  source-cartographer -> impact-analyst -> risk-reviewer -> output-editor
+handoff        source-cartographer -> handoff-writer -> risk-reviewer -> output-editor
+```
+
+`codelingo run` applies the source-file guard, reads the target file, composes the agent prompts, and writes a provider-ready prompt under `.codelingo/runs/`. The prompt includes the expected final output path, such as `.codelingo/scheduler.md` or `.codelingo/change-impact-scheduler.md`.
+
 ## What Each Command Produces
 
 | Command | Use it when | Output |

@@ -178,8 +178,33 @@ curl -o ~/.claude/commands/handoff.md        https://raw.githubusercontent.com/S
 codelingo install      슬래시 커맨드를 ~/.claude/commands/ 에 복사
 codelingo uninstall    슬래시 커맨드를 ~/.claude/commands/ 에서 제거
 codelingo list         설치된 커맨드 상태 확인
+codelingo agents       사용할 수 있는 역할 프롬프트 확인
+codelingo tasks        사용할 수 있는 하네스 작업 확인
+codelingo run          소스 파일용 하네스 실행 프롬프트 생성
 codelingo help         도움말 출력
 ```
+
+## 하네스 모드
+
+CodeLingo는 이제 슬래시 커맨드와 같은 작업 모델을 쓰는 agent 기반 하네스 러너를 포함합니다.
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language ko --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "최대 재시도 횟수 추가"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+역할 프롬프트는 `agents/*.md`에 일반 Markdown 파일로 저장됩니다.
+
+```text
+explain-file   source-cartographer -> explainer -> risk-reviewer -> output-editor
+change-impact  source-cartographer -> impact-analyst -> risk-reviewer -> output-editor
+handoff        source-cartographer -> handoff-writer -> risk-reviewer -> output-editor
+```
+
+`codelingo run`은 소스 파일 가드를 먼저 적용하고, 대상 파일을 읽은 뒤, task에 맞는 agent 프롬프트를 조합해 provider에 넘길 수 있는 프롬프트를 `.codelingo/runs/` 아래에 저장합니다. 프롬프트에는 `.codelingo/scheduler.md`, `.codelingo/change-impact-scheduler.md` 같은 최종 산출물 경로도 함께 들어갑니다.
 
 ## 필요 조건
 

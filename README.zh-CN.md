@@ -178,8 +178,25 @@ curl -o ~/.claude/commands/handoff.md        https://raw.githubusercontent.com/S
 codelingo install      将斜杠命令复制到 ~/.claude/commands/
 codelingo uninstall    从 ~/.claude/commands/ 删除斜杠命令
 codelingo list         查看安装状态
+codelingo agents       查看可用的角色提示词
+codelingo tasks        查看可用的 harness 任务
+codelingo run          为源文件生成 harness 运行提示词
 codelingo help         显示帮助
 ```
+
+## Harness 模式
+
+CodeLingo 现在也包含一个轻量 agent-based harness runner，使用和斜杠命令相同的任务模型。
+
+```bash
+codelingo agents
+codelingo tasks
+codelingo run explain-file src/utils/scheduler.py --language zh --skill familiar
+codelingo run change-impact src/utils/scheduler.py --change "添加最大重试次数"
+codelingo run handoff src/auth/middleware.ts --audience "external developer"
+```
+
+角色提示词保存在 `agents/*.md`。`codelingo run` 会先应用源文件 guard，读取目标文件，组合对应 task 的 agent 提示词，然后把可交给 provider 的提示词写入 `.codelingo/runs/`。提示词里也会包含最终输出路径。
 
 ## 运行要求
 
